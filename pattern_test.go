@@ -104,13 +104,13 @@ func TestFromWideString(t *testing.T) {
 	}
 }
 
-func TestParsePattern(t *testing.T) {
-	p, err := ParsePattern("01 ??[2] FF")
+func TestParse(t *testing.T) {
+	p, err := Parse("01 ??[2] FF")
 	if err != nil {
-		t.Fatalf("ParsePattern failed: %v", err)
+		t.Fatalf("Parse failed: %v", err)
 	}
 	if p.String() != "01 ??[2] FF" {
-		t.Errorf("ParsePattern: got %q", p.String())
+		t.Errorf("Parse: got %q", p.String())
 	}
 }
 

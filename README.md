@@ -22,7 +22,7 @@
 ```go
 import "github.com/zed-0xff/go-bytepattern"
 
-pattern, err := bytepattern.ParsePattern("01 ??[2] FF")
+pattern, err := bytepattern.Parse("01 ??[2] FF")
 if err != nil {
 	log.Fatal(err)
 }
@@ -70,5 +70,5 @@ func (p Pattern) Length() int
 func (p Pattern) String() string
 func (p Pattern) Find(buffer []byte) int
 func (p Pattern) Patch(buffer []byte, offset int)
-func ParsePattern(s string) (Pattern, error)
+func Parse(s string) (Pattern, error)
 ```

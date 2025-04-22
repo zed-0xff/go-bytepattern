@@ -138,7 +138,7 @@ func (p *Pattern) FromWideString(s string) {
 	}
 }
 
-func ParsePattern(s string) (Pattern, error) {
+func Parse(s string) (Pattern, error) {
 	var p Pattern
 	err := p.FromHexString(s)
 	return p, err
