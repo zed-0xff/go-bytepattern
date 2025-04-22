@@ -62,6 +62,7 @@ type Pattern struct {
     Elements []PatternEl
 }
 
+func (p *Pattern) FromBytes(bytes []byte) error
 func (p *Pattern) FromHexString(s string) error
 func (p *Pattern) FromArgs(args []string) error
 func (p *Pattern) FromAnsiString(s string)

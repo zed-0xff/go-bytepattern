@@ -4,6 +4,29 @@ import (
 	"testing"
 )
 
+func TestFromBytes(t *testing.T) {
+	tests := []struct {
+		input    []byte
+		expected string
+		length   int
+	}{
+		{[]byte{0xAA}, "AA", 1},
+		{[]byte{0xAA, 0xBB}, "AA BB", 2},
+		{[]byte{0xAA, 0x00, 0xBB}, "AA 00 BB", 3},
+	}
+
+	for _, test := range tests {
+		var p Pattern
+		p.FromBytes(test.input)
+		if p.String() != test.expected {
+			t.Errorf("got %q, want %q", p.String(), test.expected)
+		}
+		if p.Length() != test.length {
+			t.Errorf("got length %d, want %d", p.Length(), test.length)
+		}
+	}
+}
+
 func TestFromHexString_Valid(t *testing.T) {
 	tests := []struct {
 		input    string

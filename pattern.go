@@ -82,6 +82,14 @@ func (p Pattern) Patch(buffer []byte, offset int) {
 	}
 }
 
+// no wildcards
+func (p *Pattern) FromBytes(input []byte) {
+	p.elements = make([]PatternEl, 0, len(input))
+	for _, b := range input {
+		p.elements = append(p.elements, PatternEl{value: int32(b), times: 1})
+	}
+}
+
 func (p *Pattern) FromHexString(input string) error {
 	p.elements = nil
 	tokens, err := tokenize(input)
