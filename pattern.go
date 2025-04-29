@@ -153,13 +153,21 @@ func Parse(s string) (Pattern, error) {
 }
 
 func tokenize(input string) ([]string, error) {
-	input = strings.ReplaceAll(input, " ", "")
+	input = strings.ToLower(strings.TrimSpace(input))
+
 	var tokens []string
 	for i := 0; i < len(input); {
-		if i+1 < len(input) && input[i] == '?' && input[i+1] == '?' {
-			tokens = append(tokens, "??")
-			i += 2
-		} else if input[i] == '[' {
+		switch input[i] {
+		case ' ', '\t', '\n', '\r':
+			i++
+		case '?':
+			if i+1 < len(input) && input[i+1] == '?' {
+				tokens = append(tokens, "??")
+				i += 2
+			} else {
+				return nil, fmt.Errorf("invalid character at position %d", i)
+			}
+		case '[':
 			j := i + 1
 			for j < len(input) && input[j] != ']' {
 				j++
@@ -169,12 +177,19 @@ func tokenize(input string) ([]string, error) {
 			}
 			tokens = append(tokens, input[i:j+1])
 			i = j + 1
-		} else {
-			if i+2 > len(input) {
+		case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f':
+			if i == len(input)-1 {
 				return nil, fmt.Errorf("incomplete hex byte at position %d", i)
 			}
-			tokens = append(tokens, input[i:i+2])
-			i += 2
+			switch input[i+1] {
+			case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f':
+				tokens = append(tokens, input[i:i+2])
+				i += 2
+			default:
+				return nil, fmt.Errorf("invalid hex byte at position %d", i)
+			}
+		default:
+			return nil, fmt.Errorf("invalid character at position %d: %c", i, input[i])
 		}
 	}
 	return tokens, nil

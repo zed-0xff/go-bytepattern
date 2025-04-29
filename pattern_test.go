@@ -137,6 +137,40 @@ func TestParse(t *testing.T) {
 	}
 }
 
+func TestParseSpaces(t *testing.T) {
+	p, err := Parse("01   ??[2]               FF")
+	if err != nil {
+		t.Fatalf("Parse failed: %v", err)
+	}
+	if p.String() != "01 ??[2] FF" {
+		t.Errorf("Parse: got %q", p.String())
+	}
+}
+
+func TestParseTabs(t *testing.T) {
+	p, err := Parse("01\t??[2]\t\t\tFF")
+	if err != nil {
+		t.Fatalf("Parse failed: %v", err)
+	}
+	if p.String() != "01 ??[2] FF" {
+		t.Errorf("Parse: got %q", p.String())
+	}
+}
+
+func TestParseNL(t *testing.T) {
+	p, err := Parse(`
+    01
+    ??[2]
+    FF
+    `)
+	if err != nil {
+		t.Fatalf("Parse failed: %v", err)
+	}
+	if p.String() != "01 ??[2] FF" {
+		t.Errorf("Parse: got %q", p.String())
+	}
+}
+
 func TestPatternLength(t *testing.T) {
 	p := Pattern{
 		elements: []PatternEl{
